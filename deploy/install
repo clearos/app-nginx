@@ -1,0 +1,23 @@
+#!/bin/sh
+
+TIMESTAMP=`date "+%b-%d-%Y-%T"`
+
+# Set default configuration
+#--------------------------
+
+logger -p local6.notice -t installer "app-nginx-core - setting default configuration"
+
+if [ -e /etc/nginx/nginx.conf ]; then
+    cp /etc/nginx/nginx.conf /var/clearos/nginx/backup/nginx.conf$TIMESTAMP
+fi
+
+cp /usr/clearos/apps/nginx/deploy/nginx.conf /etc/nginx/nginx.conf
+
+# Set default start/boot
+#-----------------------
+
+logger -p local6.notice -t installer "app-nginx-core - enabling NGINX server"
+chkconfig nginx on >/dev/null 2>&1
+
+logger -p local6.notice -t installer "app-nginx-core - starting NGINX server"
+service nginx start >/dev/null 2>&1
